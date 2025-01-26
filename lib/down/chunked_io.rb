@@ -173,18 +173,16 @@ module Down
 
       unless @buffer.nil? || remaining_length == 0
         if remaining_length < @buffer.bytesize
-          buffered_data = @buffer.byteslice(0, remaining_length)
+          buffered_data = @buffer.byteslice(0, remaining_length).dup
           @buffer       = @buffer.byteslice(remaining_length..-1)
         else
-          buffered_data = @buffer
+          buffered_data = @buffer.dup
           @buffer       = nil
         end
 
         data << buffered_data
 
         cache.write(buffered_data) if cache
-
-        buffered_data.clear unless buffered_data.frozen?
       end
 
       @position += data.bytesize
